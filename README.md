@@ -1,4 +1,4 @@
-# Cryptography---19CS412-classical-techqniques
+![Screenshot 2024-03-01 140610](https://github.com/MohamedMunthasir/Cryptography---19CS412-classical-techqniques/assets/121957086/cc319732-5ddc-4528-b9b0-f2521441965b)# Cryptography---19CS412-classical-techqniques
 
 
 # Caeser Cipher
@@ -115,11 +115,91 @@ Testing algorithm with different key values.
 ## PROGRAM:
 ```python
 
+def prepare_text(text):
+    text = text.replace(" ", "").upper()
+    if len(text) % 2 != 0:
+        text += 'X'
+    return text
 
+def generate_playfair_matrix(key):
+    key = key.replace(" ", "").upper()
+    # Create a set of unique characters in the key
+    key_set = []
+    for char in key:
+        if char not in key_set and char != 'J':  # Replace 'J' with 'I'
+            key_set.append(char)
+   
+    alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
+    matrix = [key_set]
+    for char in alphabet:
+        if char not in key_set:
+            matrix[-1].append(char)
+            if len(matrix[-1]) == 5:
+                matrix.append([])
+    return matrix
+
+def get_char_position(matrix, char):
+    for i, row in enumerate(matrix):
+        if char in row:
+            return i, row.index(char)
+    raise ValueError(f"Character '{char}' not found in the matrix.")
+
+## ENCRYPTION
+
+def playfair_encrypt(plaintext, key):
+    plaintext = prepare_text(plaintext)
+    matrix = generate_playfair_matrix(key)
+    ciphertext = ""
+    for i in range(0, len(plaintext), 2):
+        char1, char2 = plaintext[i], plaintext[i+1]
+        row1, col1 = get_char_position(matrix, char1)
+        row2, col2 = get_char_position(matrix, char2)
+        if row1 == row2:  # Characters are in the same row
+            ciphertext += matrix[row1][(col1 + 1) % 5]
+            ciphertext += matrix[row2][(col2 + 1) % 5]
+        elif col1 == col2:  # Characters are in the same column
+            ciphertext += matrix[(row1 + 1) % 5][col1]
+            ciphertext += matrix[(row2 + 1) % 5][col2]
+        else:  # Characters form a rectangle
+            ciphertext += matrix[row1][col2]
+            ciphertext += matrix[row2][col1]
+    return ciphertext
+
+## DECRYPTION
+
+def playfair_decrypt(ciphertext, key):
+    ciphertext = prepare_text(ciphertext)
+    matrix = generate_playfair_matrix(key)
+    plaintext = ""
+    for i in range(0, len(ciphertext), 2):
+        char1, char2 = ciphertext[i], ciphertext[i+1]
+        row1, col1 = get_char_position(matrix, char1)
+        row2, col2 = get_char_position(matrix, char2)
+        if row1 == row2:  # Characters are in the same row
+            plaintext += matrix[row1][(col1 - 1) % 5]
+            plaintext += matrix[row2][(col2 - 1) % 5]
+        elif col1 == col2:  # Characters are in the same column
+            plaintext += matrix[(row1 - 1) % 5][col1]
+            plaintext += matrix[(row2 - 1) % 5][col2]
+        else:  # Characters form a rectangle
+            plaintext += matrix[row1][col2]
+            plaintext += matrix[row2][col1]
+    return plaintext
+
+plaintext = "munthasir"
+key = "hai"
+
+encrypted_text = playfair_encrypt(plaintext, key)
+print("Original Text:", plaintext)
+print("Encrypted Text:", encrypted_text)
+
+
+decrypted_text = playfair_decrypt(encrypted_text, key)
+print("Decrypted Text:", decrypted_text)
 ```
 
 ## OUTPUT:
-![Screenshot 2024-03-01 132921](https://github.com/jaisurya143/Cryptography---19CS412-classical-techqniques/assets/121999338/3cfe72e5-94b7-4784-ad5f-be6b9d68c916)
+![Screenshot 2024-03-01 140416](https://github.com/MohamedMunthasir/Cryptography---19CS412-classical-techqniques/assets/121957086/3788ae2a-7799-4eb5-87b0-eff0fb992d9c)
 
 ## RESULT:
 The program is executed successfully
@@ -201,7 +281,7 @@ def hill_decrypt(encrypted_text, key_matrix):
     return decrypted_text
 
 key = "hill"
-plaintext = "SURYA"
+plaintext = "MUNTHASIR"
 key_matrix = generate_key_matrix(key)
 
 encrypted_text = hill_encrypt(plaintext, key_matrix)
@@ -213,7 +293,7 @@ decrypted_text = hill_decrypt(encrypted_text, key_matrix)
 print("Decrypted text:", decrypted_text)
 ```
 ## OUTPUT:
-![Screenshot 2024-02-29 164352](https://github.com/jaisurya143/Cryptography---19CS412-classical-techqniques/assets/121999338/d6942745-3ef3-49ea-ad63-3f87606d3922)
+![Screenshot 2024-03-01 140610](https://github.com/MohamedMunthasir/Cryptography---19CS412-classical-techqniques/assets/121957086/2e07aae1-9380-4081-b762-33bba1d3ef7d)
 
 ## RESULT:
 The program is executed successfully
@@ -282,7 +362,7 @@ def vigenere_decrypt(encrypted_text, key):
             decrypted_text += char
     return decrypted_text
 
-plain_text = "surya"
+plain_text = "MUNTHASIR"
 key = "cipher"
 encrypted_text = vigenere_encrypt(plain_text, key)
 print("Original Text:", plain_text)
@@ -293,7 +373,8 @@ print("Decrypted Text:", decrypted_text)
 ```
 
 ## OUTPUT:
-![Screenshot 2024-02-29 164729](https://github.com/jaisurya143/Cryptography---19CS412-classical-techqniques/assets/121999338/d427db5d-eb56-483a-8cf0-3d0558b4fd4e)
+
+![Screenshot 2024-03-01 140857](https://github.com/MohamedMunthasir/Cryptography---19CS412-classical-techqniques/assets/121957086/23b87d89-812e-49cc-aeeb-f7fcfa7ca8b8)
 
 ## RESULT:
 The program is executed successfully
@@ -375,7 +456,7 @@ def rail_fence_decrypt(encrypted_text, key):
 
     return decrypted_text
 
-plain_text = "surya"
+plain_text = "muntha"
 key = 3
 encrypted_text = rail_fence_encrypt(plain_text, key)
 print("Original Text:", plain_text)
@@ -386,7 +467,8 @@ print("Decrypted Text:", decrypted_text)
 ```
 
 ## OUTPUT:
-![Screenshot 2024-02-29 165220](https://github.com/jaisurya143/Cryptography---19CS412-classical-techqniques/assets/121999338/3be17f03-5a5f-47ac-bc3b-02353c870c51)
+![Screenshot 2024-03-01 141022](https://github.com/MohamedMunthasir/Cryptography---19CS412-classical-techqniques/assets/121957086/2b24e4ae-05cd-47e9-92e5-f4effa05bc66)
+
 
 ## RESULT:
 The program is executed successfully
