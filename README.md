@@ -1,4 +1,4 @@
-![Screenshot 2024-03-01 140610](https://github.com/MohamedMunthasir/Cryptography---19CS412-classical-techqniques/assets/121957086/cc319732-5ddc-4528-b9b0-f2521441965b)# Cryptography---19CS412-classical-techqniques
+# Cryptography---19CS412-classical-techqniques
 
 
 # Caeser Cipher
