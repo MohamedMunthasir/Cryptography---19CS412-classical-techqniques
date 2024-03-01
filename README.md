@@ -45,7 +45,7 @@ def caesar_cipher(text, shift):
         else:
             encrypted_text += char
     return encrypted_text
-text = "surya"
+text = "munthasir"
 shift = 3
 
 
@@ -76,7 +76,7 @@ def caesar_decrypt(encrypted_text, shift):
     return decrypted_text
 
 
-text = "surya"
+text = "munthasir"
 shift = 3
 
 decrypted_text = caesar_decrypt(encrypted_text, shift)
@@ -85,7 +85,7 @@ print("Decrypted Text:", decrypted_text)
 ```
 
 ## OUTPUT:
-![Screenshot 2024-02-29 163252](https://github.com/jaisurya143/Cryptography---19CS412-classical-techqniques/assets/121999338/87fb12c6-b5fe-490e-b56c-b751d4c424bb)
+![image](https://github.com/MohamedMunthasir/Cryptography---19CS412-classical-techqniques/assets/121957086/4548aab0-4890-4e3a-b1fe-b0a5f960f588)
 
 ## RESULT:
 The program is executed successfully
