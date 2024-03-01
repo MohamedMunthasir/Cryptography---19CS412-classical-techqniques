@@ -6,7 +6,7 @@ Caeser Cipher using with different key values
 
 # AIM:
 
-To develop a simple c or python program to implement Caeser Cipher.
+To develop a simple python program to implement Caeser Cipher.
 
 ## DESIGN STEPS:
 
@@ -115,87 +115,7 @@ Testing algorithm with different key values.
 ## PROGRAM:
 ```python
 
-def prepare_text(text):
-    text = text.replace(" ", "").upper()
-    if len(text) % 2 != 0:
-        text += 'X'
-    return text
 
-def generate_playfair_matrix(key):
-    key = key.replace(" ", "").upper()
-    # Create a set of unique characters in the key
-    key_set = []
-    for char in key:
-        if char not in key_set and char != 'J':  # Replace 'J' with 'I'
-            key_set.append(char)
-   
-    alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
-    matrix = [key_set]
-    for char in alphabet:
-        if char not in key_set:
-            matrix[-1].append(char)
-            if len(matrix[-1]) == 5:
-                matrix.append([])
-    return matrix
-
-def get_char_position(matrix, char):
-    for i, row in enumerate(matrix):
-        if char in row:
-            return i, row.index(char)
-    raise ValueError(f"Character '{char}' not found in the matrix.")
-
-## ENCRYPTION
-
-def playfair_encrypt(plaintext, key):
-    plaintext = prepare_text(plaintext)
-    matrix = generate_playfair_matrix(key)
-    ciphertext = ""
-    for i in range(0, len(plaintext), 2):
-        char1, char2 = plaintext[i], plaintext[i+1]
-        row1, col1 = get_char_position(matrix, char1)
-        row2, col2 = get_char_position(matrix, char2)
-        if row1 == row2:  # Characters are in the same row
-            ciphertext += matrix[row1][(col1 + 1) % 5]
-            ciphertext += matrix[row2][(col2 + 1) % 5]
-        elif col1 == col2:  # Characters are in the same column
-            ciphertext += matrix[(row1 + 1) % 5][col1]
-            ciphertext += matrix[(row2 + 1) % 5][col2]
-        else:  # Characters form a rectangle
-            ciphertext += matrix[row1][col2]
-            ciphertext += matrix[row2][col1]
-    return ciphertext
-
-## DECRYPTION
-
-def playfair_decrypt(ciphertext, key):
-    ciphertext = prepare_text(ciphertext)
-    matrix = generate_playfair_matrix(key)
-    plaintext = ""
-    for i in range(0, len(ciphertext), 2):
-        char1, char2 = ciphertext[i], ciphertext[i+1]
-        row1, col1 = get_char_position(matrix, char1)
-        row2, col2 = get_char_position(matrix, char2)
-        if row1 == row2:  # Characters are in the same row
-            plaintext += matrix[row1][(col1 - 1) % 5]
-            plaintext += matrix[row2][(col2 - 1) % 5]
-        elif col1 == col2:  # Characters are in the same column
-            plaintext += matrix[(row1 - 1) % 5][col1]
-            plaintext += matrix[(row2 - 1) % 5][col2]
-        else:  # Characters form a rectangle
-            plaintext += matrix[row1][col2]
-            plaintext += matrix[row2][col1]
-    return plaintext
-
-plaintext = "surya"
-key = "jai"
-
-encrypted_text = playfair_encrypt(plaintext, key)
-print("Original Text:", plaintext)
-print("Encrypted Text:", encrypted_text)
-
-
-decrypted_text = playfair_decrypt(encrypted_text, key)
-print("Decrypted Text:", decrypted_text)
 ```
 
 ## OUTPUT:
